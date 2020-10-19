@@ -7,7 +7,7 @@
     "email": "khalby786@gmail.com"
   },
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --port 80",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "start": "node index.js"
@@ -17,7 +17,9 @@
     "core-js": "^3.6.5",
     "deta": "0.0.8",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0"
+    "vue-router": "^4.0.0-0",
+    "vue-toasted": "^1.1.28",
+    "vue-toastification": "^2.0.0-beta.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
