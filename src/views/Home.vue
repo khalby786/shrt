@@ -5,14 +5,12 @@
 </template>
 
 <script>
+import AddURL from "@/components/AddURL.vue";
 
-  import AddURL from "@/components/AddURL.vue";
-
-  export default {
-    name: "Home",
-    components: {
-      AddURL
-    }
-  };
-
+export default {
+  name: "Home",
+  components: {
+    AddURL,
+  },
+};
 </script>

@@ -41,16 +41,14 @@ module.exports = (req, res) => {
             } else {
                 db.put({ "url": url, "visits": 0 }, slug)
                     .then(data => {
-                        res.send("Yaay!");
+                        res.status(200).json({ status: 200, message: "URL successfully shortened!", slug: slug });
                     })
                     .catch(err => {
-                        console.error(err);
+                        res.status(500).json({ status: 400, error: err });
                     });
             }
         }).catch(error => {
             console.error(error);
-            res.send({ status: 500, message: "Slug already exists!" })
+            res.status(500).json({ status: 400, error: error });
         })
-
-    console.log("is this code being executed?")
 }
