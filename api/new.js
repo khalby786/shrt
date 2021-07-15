@@ -4,14 +4,6 @@ const db = deta.Base('urls');
 
 module.exports = (req, res) => {
     let { url, slug } = req.body;
-    // (async() => {
-    //     try {
-    //         await db.put({ "url": url }, slug);
-    //     } catch(e) {
-    //         console.error(e);
-    //     }
-    // })();
-    // res.send("Hopefully, it worked!");
 
     function validURL(str) {
         var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -37,18 +29,18 @@ module.exports = (req, res) => {
         .then(data => {
             console.log(data)
             if (data !== null) {
-                res.send({ status: 401, message: "Slug already exists!" });
+                res.status(401).json({ status: 401, message: "Slug already exists!" });
             } else {
                 db.put({ "url": url, "visits": 0 }, slug)
                     .then(data => {
                         res.status(200).json({ status: 200, message: "URL successfully shortened!", slug: slug });
                     })
                     .catch(err => {
-                        res.status(500).json({ status: 400, error: err });
+                        res.status(500).json({ status: 500, message:"Something went wrong, try again?", error: err });
                     });
             }
         }).catch(error => {
             console.error(error);
-            res.status(500).json({ status: 400, error: error });
+            res.status(500).json({ status: 500, message:"Something went wrong, try again?", error: error });
         })
 }
