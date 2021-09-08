@@ -18,24 +18,28 @@
     <input
       id="slug"
       type="text"
-      placeholder="myshorturl"
+      placeholder="shortened-url-slug"
       v-model="slug"
       name="slug"
-      @input="slugify(this.slug)"
+      @input="slugify()"
       required
     /><br />
-    <input id="submit-url" type="submit" value="small-ify!" />
+    <input id="submit-url" type="submit" value="small-ify!" :disabled="isValidUrl" />
   </form>
 
   <transition name="fade">
     <p class="message" v-if="showResultPrompt === true">
       {{ message }} &nbsp;
-      <a v-if="loadingOverlay.shortenedUrl === true && message !== ''" :href="location + slugFromResponse">{{
-        location + slugFromResponse
-      }}</a>
+      <a
+        v-if="loadingOverlay.shortenedUrl === true && message !== ''"
+        :href="location + slugFromResponse"
+        >{{ location + slugFromResponse }}</a
+      >
 
       <span class="right-text">
-        <span class="url-share" v-if="loadingOverlay.share === true">{{ shareText }}</span
+        <span class="url-share" v-if="loadingOverlay.share === true">{{
+          shareText
+        }}</span
         >&nbsp;
         <span class="dismiss-text" @click="this.showResultPrompt = false"
           >ALRIGHT, COOL!</span
@@ -44,24 +48,15 @@
     </p>
   </transition>
 
-  <br /><br />
-
-  <button class="stats" @click="wannaViewStats = true">slug stats</button><br />
-  <input
-    v-if="wannaViewStats"
-    type="text"
-    placeholder="enter slug to view stats. eg.: /myshorturl"
-    v-model="statSlug"
-  />
-
-  <div class="loading-overlay" v-if="showLoadingOverlay === true">
-    <p>Loading...</p>
-  </div>
+  <Loading :showLoadingOverlay="false" />
 </template>
 
 <script>
 const isUrl = require("is-valid-http-url");
 const friendlyWords = require("friendly-words");
+
+// import components
+import Loading from "@/components/Loading.vue";
 
 export default {
   name: "AddURL",
@@ -69,25 +64,26 @@ export default {
     return {
       url: null,
       slug: null,
+      isValidUrl: this.validURL(this.url),
       message: "",
-      wannaViewStats: false,
-      statSlug: null,
       slugFromResponse: "",
       location: window.location,
       urlPrompt: "",
       shareText: "COPY TO CLIPBOARD!",
       showResultPrompt: false,
-      showLoadingOverlay: false,
       loadingOverlay: {
         share: false,
-        shortenedUrl: false
-      }
-    };
+        shortenedUrl: false,
+      },
+    }
   },
   watch: {
     slug: function (raw, formated) {
       this.slugify();
     },
+  },
+  components: {
+    Loading,
   },
   mounted() {
     let that = this;
@@ -206,52 +202,16 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 a {
   color: #6b17e6;
 }
 
 form {
-  padding: 5vw;
-}
-
-label {
-  text-align: left;
-  font-size: 14px;
-  font-family: var(--sans);
-}
-
-[type="url"],
-[type="text"] {
-  display: block;
-  box-shadow: none;
-  border: none;
-  font-size: 72px;
-  color: var(--blue);
-  font-family: var(--mono);
-  transition: 150ms;
-  width: 100%;
-  background-color: var(--lightpink);
-  font-size: 26px;
-  font-weight: 700;
-}
-
-[type="url"]:hover,
-[type="text"]:hover {
-  transition: 150ms;
-}
-
-[type="url"]:focus,
-[type="text"]:focus {
-  outline: none;
-}
-
-.prompt {
-  background-color: var(--darkblue);
-  color: white;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  padding: 3px 5px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-top: 50px;
+  padding-bottom: 50px; 
 }
 
 #submit-url {
@@ -284,67 +244,6 @@ label {
   color: var(--darkblue);
 }
 
-[type="submit"],
-button {
-  display: block;
-  margin-top: 15px;
-  box-shadow: none;
-  border: 1px solid grey;
-  color: black;
-  font-family: "Fira Code", monospace;
-  transition: 150ms;
-  padding: 10px 20px;
-  cursor: pointer;
-  background-color: white;
-  /* margin: 0 auto; */
-}
-
-[type="submit"]:hover,
-button:hover {
-  background-color: black;
-  color: white;
-  transition: 150ms;
-}
-
-[type="submit"]:active {
-  background-color: yellow;
-  color: black;
-  transition: 150ms;
-}
-
-.loading-overlay {
-  z-index: 9;
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  left: 0px;
-  background-color: rgba(0, 0, 0, 0.5);
-  height: 100%;
-  width: 100%;
-  font-family: var(--sans);
-  font-weight: 500;
-  font-size: 24px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loading-overlay > * {
-  margin: auto;
-  padding: 0 5px 8px 0;
-  background: repeating-linear-gradient(90deg, currentColor 0 8%, #0000 0 10%)
-    200% 100%/200% 3px no-repeat;
-  animation: c3 2s steps(6) infinite;
-  color: white;
-}
-
-@keyframes c3 {
-  to {
-    background-position: 80% 100%;
-  }
-}
-
 .message {
   text-align: left;
   font-family: var(--sans);
@@ -373,17 +272,6 @@ button:hover {
   cursor: pointer;
   color: var(--cyan);
   font-weight: bold;
-}
-
-/* vue fade transition */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
 }
 
 @media only screen and (max-width: 600px) {

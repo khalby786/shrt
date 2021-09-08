@@ -4,6 +4,13 @@ const db = deta.Base("urls");
 
 module.exports = (req, res) => {
   let { slug } = req.query;
+  
+  if (!slug || slug.length === 0) {
+    return res.status(400).json({
+      error: "No slug provided",
+    });
+  }
+
   db.get(decodeURIComponent(slug))
     .then((data) => {
       console.log(data);
@@ -17,12 +24,10 @@ module.exports = (req, res) => {
     })
     .catch((error) => {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          status: 500,
-          message: "Something went wrong, try again?",
-          error: error,
-        });
+      res.status(500).json({
+        status: 500,
+        message: "Something went wrong, try again?",
+        error: error,
+      });
     });
 };

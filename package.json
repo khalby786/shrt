@@ -18,6 +18,7 @@
     "core-js": "^3.6.5",
     "deta": "0.0.8",
     "friendly-words": "^1.2.0",
+    "funnies": "^2.1.0",
     "is-valid-http-url": "^1.0.3",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",

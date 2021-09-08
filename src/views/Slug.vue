@@ -26,18 +26,9 @@ export default {
       .then((data) => {
         if (data.status === 400) {
           this.url = false;
-          // window.location.replace("/");
         }
-        console.log("going to add 1 to counter!");
-        // fetch("/api/counter?slug=" + this.slug)
-        //     .then(res => res.text())
-        //     .then(data => console.log(data))
-        (async () => {
-          console.log(this.slug);
-          let request = await fetch("/api/counter?slug=" + this.slug);
-          let response = await request.text();
-          console.log(response);
 
+        (async () => {
           window.location.replace(decodeURIComponent(data.data.url));
           if (
             data.data.url ===
